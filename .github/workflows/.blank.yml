@@ -14,5 +14,5 @@ jobs:
     - name: Download
       run: curl {{ secret.TOOL_URL }} --output 4D.dmg
     - name: Run
-      run: {{ secret.APP_PATH }} {{secret.OPTIONS}} Project/TestLogOutput.4DProject
+      run: {{ secret.APP_PATH }} {{secret.OPTIONS}} "Project/TestLogOutput.4DProject"
 
