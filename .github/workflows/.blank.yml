@@ -13,5 +13,6 @@ jobs:
         unzip 4d.zip
         echo "{{ secret.LICENSE_4D }}" > $HOME/Application\ Support/4D/Licenses/"{{ secret.LICENSE_NAME }}".license4D
     - name: Run
-      run: {{ secret.APP_PATH }} {{secret.OPTIONS}} "Project/TestLogOutput.4DProject"
+      run: |
+        {{ secret.APP_PATH }} {{secret.OPTIONS}} "Project/TestLogOutput.4DProject"
 
