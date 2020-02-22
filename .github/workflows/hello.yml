@@ -1,6 +1,10 @@
 name: Hello World
 
-on: [push]
+on:
+  push:
+    paths:
+    - 'Project/**'
+    - '.github/workflows/hello.yml'
 
 jobs:
   build:
