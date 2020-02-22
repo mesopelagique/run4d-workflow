@@ -1,4 +1,4 @@
-name: Hellow
+name: Hello World
 
 on: [push]
 
@@ -7,12 +7,11 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Update License
-      run: echo "{{ secret.LICENSE_4D }}" > $HOME/Application\ Support/4D/Licenses/"{{ secret.LICENSE_NAME }}".license4D
-    - name: Download
-      run: curl {{ secret.TOOL_URL }} --output 4D.dmg
+    - name: Setup 4D
+      run: |
+        curl {{ secret.TOOL_URL }} --output 4d.zip
+        unzip 4d.zip
+        echo "{{ secret.LICENSE_4D }}" > $HOME/Application\ Support/4D/Licenses/"{{ secret.LICENSE_NAME }}".license4D
     - name: Run
       run: {{ secret.APP_PATH }} {{secret.OPTIONS}} "Project/TestLogOutput.4DProject"
 
