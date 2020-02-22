@@ -24,4 +24,18 @@ jobs:
       run: |
         WORKING_DIR=$(pwd)
         echo "{\"output\": \"build\"}" > "$WORKING_DIR/make.json"
-        ${{ secrets.APP_PATH }} ${{ secrets.OPTIONS}} "${{ secrets.BUILDER_NAME}}/Project/builder.4DProject" --user-param "{\"makeFile\":\"$WORKING_DIR/make.json\",\"verbose\":true,\"debug\":true}"
+        ouput="build.log"
+        ${{ secrets.APP_PATH }} ${{ secrets.OPTIONS}} "${{ secrets.BUILDER_NAME}}/Project/builder.4DProject" --user-param "{\"makeFile\":\"$WORKING_DIR/make.json\",\"verbose\":true,\"debug\":true}" > $ouput 2>&1
+        statusCode=0
+        while IFS= read -r line
+        do
+          if [[ $line == *"error"* ]]; then
+            >&2 echo "$line" | sed -e "s/^$logPrefix//"
+            statusCode=1
+          else
+            echo "$line" | sed -e "s/^$logPrefix//"
+          fi
+        done < "$ouput"
+        exit $statusCode
+
+        
