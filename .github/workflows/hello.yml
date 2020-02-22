@@ -10,7 +10,8 @@ jobs:
     - name: Setup 4D
       run: |
         curl ${{ secrets.TOOL_URL }} --output 4d.zip
-        unzip 4d.zip
+        unzip -q 4d.zip
+        mkdir -p $HOME/Application\ Support/4D/Licenses/
         echo "${{ secrets.LICENSE_4D }}" > $HOME/Application\ Support/4D/Licenses/"${{ secrets.LICENSE_NAME }}".license4D
     - name: Run
       run: |
