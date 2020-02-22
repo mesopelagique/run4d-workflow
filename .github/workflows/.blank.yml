@@ -9,10 +9,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setup 4D
       run: |
-        curl {{ secret.TOOL_URL }} --output 4d.zip
+        curl ${{ secrets.TOOL_URL }} --output 4d.zip
         unzip 4d.zip
-        echo "{{ secret.LICENSE_4D }}" > $HOME/Application\ Support/4D/Licenses/"{{ secret.LICENSE_NAME }}".license4D
+        echo "${{ secrets.LICENSE_4D }}" > $HOME/Application\ Support/4D/Licenses/"${{ secrets.LICENSE_NAME }}".license4D
     - name: Run
       run: |
-        {{ secret.APP_PATH }} {{secret.OPTIONS}} "Project/TestLogOutput.4DProject"
+        ${{ secrets.APP_PATH }} ${{ secrets.OPTIONS}} "Project/TestLogOutput.4DProject"
 
