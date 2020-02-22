@@ -1,0 +1,23 @@
+name: Build
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup 4D
+      run: |
+        curl ${{ secrets.TOOL_URL }} --output 4d.zip
+        unzip -q 4d.zip
+        mkdir -p $HOME/Application\ Support/4D/Licenses/
+        echo "${{ secrets.LICENSE_4D }}" > $HOME/Application\ Support/4D/Licenses/"${{ secrets.LICENSE_NAME }}".license4D
+    - name: Setup BUILDER
+      run: |
+        curl ${{ secrets.TOOL_URL }} --output builder.zip
+        unzip -q builder.zip
+    - name: Build
+      run: |
+        WORKING_DIR=$(pwd)
+        echo "{\"output\": \"build\"}" > "$WORKING_DIR/make.json"
+        ${{ secrets.APP_PATH }} ${{ secrets.OPTIONS}} "${{ secrets.BUILDER_NAME}}/Project/builder.4DProject" --user-param "{\"makeFile\":\"$WORKING_DIR/make.json\",\"verbose\":true,\"debug\":true}
