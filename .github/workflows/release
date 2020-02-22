@@ -1,0 +1,43 @@
+name: Release
+on:
+  push:
+    paths:
+    - 'Project/**'
+    - '.github/workflows/release.yml'
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup 4D
+      run: |
+        curl ${{ secrets.TOOL_URL }} --output 4d.zip
+        unzip -q 4d.zip
+        mkdir -p $HOME/Application\ Support/4D/Licenses/
+        echo "${{ secrets.LICENSE_4D }}" > $HOME/Application\ Support/4D/Licenses/"${{ secrets.LICENSE_NAME }}".license4D
+    - name: Setup BUILDER
+      run: |
+        curl ${{ secrets.BUILDER_URL }} --output builder.zip
+        unzip -q builder.zip
+    - name: Build
+      run: |
+        WORKING_DIR=$(pwd)
+        echo "{\"output\": \"build\"}" > "$WORKING_DIR/make.json"
+        ${{ secrets.APP_PATH }} ${{ secrets.OPTIONS}} "${{ secrets.BUILDER_NAME}}/Project/builder.4DProject" --user-param "{\"makeFile\":\"$WORKING_DIR/make.json\",\"verbose\":true,\"debug\":true}"
+    - name: Upload to Release
+      run: |
+        REPOSITORY_NAME=$(jq --raw-output '.repository.name' $GITHUB_EVENT_PATH)
+        ARTIFACT=./build/release/run4d-workflow.4dbase/TestLogOutput.4DZ
+        AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
+        CONTENT_LENGTH_HEADER="Content-Length: $(stat -f%z "$ARTIFACT")"
+        CONTENT_TYPE_HEADER="Content-Type: application/zip"
+        RELEASE_ID=$(jq --raw-output '.release.id' $GITHUB_EVENT_PATH)
+        FILENAME=$(basename $ARTIFACT)
+        UPLOAD_URL="https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$FILENAME"
+        echo "$UPLOAD_URL"
+        curl -sSL -XPOST \
+          -H "$AUTH_HEADER" -H "$CONTENT_LENGTH_HEADER" -H "$CONTENT_TYPE_HEADER" \
+          --upload-file "$ARTIFACT" "$UPLOAD_URL"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
