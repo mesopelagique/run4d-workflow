@@ -1,5 +1,9 @@
 name: Build
-on: [push]
+on:
+  push:
+    paths:
+    - 'Project/**'
+    - '.github/workflows/build.yml'
 
 jobs:
   build:
@@ -20,4 +24,4 @@ jobs:
       run: |
         WORKING_DIR=$(pwd)
         echo "{\"output\": \"build\"}" > "$WORKING_DIR/make.json"
-        ${{ secrets.APP_PATH }} ${{ secrets.OPTIONS}} "${{ secrets.BUILDER_NAME}}/Project/builder.4DProject" --user-param "{\"makeFile\":\"$WORKING_DIR/make.json\",\"verbose\":true,\"debug\":true}
+        ${{ secrets.APP_PATH }} ${{ secrets.OPTIONS}} "${{ secrets.BUILDER_NAME}}/Project/builder.4DProject" --user-param "{\"makeFile\":\"$WORKING_DIR/make.json\",\"verbose\":true,\"debug\":true}"
