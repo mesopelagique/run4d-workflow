@@ -8,3 +8,13 @@
 
 ![Hello World](https://github.com/mesopelagique/run4d-workflow/workflows/Hello%20World/badge.svg)
 ![Build](https://github.com/mesopelagique/run4d-workflow/workflows/Build/badge.svg)
+
+
+## To build we need
+
+### options
+
+| option  | blog  |
+|---|---|
+|`--headless`| https://blog.4d.com/headless-4d-applications/|
+|`--user-param`| https://blog.4d.com/improving-databases-tests/|
