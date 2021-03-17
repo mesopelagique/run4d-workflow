@@ -12,7 +12,7 @@
 
 ## To build we need
 
-- a 4D with a valid license
+- a 4D
 - a base capable of building the current base
 
 ### options
