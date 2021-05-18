@@ -10,6 +10,8 @@
 ![Build](https://github.com/mesopelagique/run4d-workflow/workflows/Build/badge.svg)
 
 
+OBSOLETE see https://github.com/mesopelagique/test-build-workflow
+
 ## To build we need
 
 - a 4D
